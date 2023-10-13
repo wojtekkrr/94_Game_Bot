@@ -36,12 +36,13 @@ pyautogui.press('space')
 # print(y)
 
 # Współrzędne pixela do analizy
-x = 510
-y_jump = 710
+x = 555
+y_jump = 741
 y_hide = 641
+y_low = 740
 
-x_steps = 10
-x_step = 10
+x_steps = 15
+x_step = 1
 
 
 kolor_poszukiwany = (83, 83, 83)
@@ -50,31 +51,27 @@ x_ckeck = []
 for i in range(x_steps + 1):
     x_ckeck.append(int(x - x_steps/2 * x_step + i * x_step))
 
-
-def jump():
-    for x_cord in x_ckeck:
-        kolor_piksela = pyautogui.pixel(x_cord, y_jump)
-        if kolor_piksela == kolor_poszukiwany:
-            return True
-    return False
+print(x_ckeck)
 
 
-def hide():
+def action():
     for x_cord in x_ckeck:
         kolor_piksela_dol = pyautogui.pixel(x_cord, y_jump)
         kolor_piksela_gora = pyautogui.pixel(x_cord, y_hide)
-        if kolor_piksela_dol != kolor_poszukiwany and kolor_piksela_gora == kolor_poszukiwany:
-            return True
-    return False
+        kolor_piksela_low = pyautogui.pixel(x_cord, y_low)
+        if kolor_piksela_low != kolor_poszukiwany and kolor_piksela_gora == kolor_poszukiwany:
+            pyautogui.press('down')
+            print("teraz dol")
+        if kolor_piksela_dol == kolor_poszukiwany:
+            pyautogui.press('space')
+            print("teraz gora")
+            sleep(0.01)
 
 
 # Pętla while będzie działać dopóki warunek escape_pressed będzie równy False
 escape_pressed = False
 while not escape_pressed:
-    if jump():
-        pyautogui.press('space')
-    if hide():
-        pyautogui.press('down')
-    sleep(0.001)
+    action()
+    sleep(0.01)
     if keyboard.is_pressed('esc'):
         escape_pressed = True
